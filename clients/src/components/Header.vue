@@ -1,7 +1,7 @@
 <template>
 <div>
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <router-link to="/" class="navbar-brand" style="cursor:pointer;color:white">Bloging Simple</router-link>
+    <router-link to="/" class="navbar-brand" style="cursor:pointer;color:white">Blogging Simple</router-link>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,7 +32,7 @@
 <script>
 window.fbAsyncInit = function() {
   FB.init({
-    appId: '1239370809540745',// 1007524822728521 localhost: 1239370809540745 amazon: 1718336034878910
+    appId: '506182999825521',// 1007524822728521 localhost: 1239370809540745 amazon: 1718336034878910
     cookie: true, // enable cookies to allow the server to access
     // the session
     xfbml: true, // parse social plugins on this page
