@@ -24,7 +24,7 @@ module.exports = {
             })
             .then(userCreate =>{
               user=userCreate
-              let token = jwt.sign({user}, 'loveyou')
+              let token = jwt.sign({user}, 'Hi!')
               res.send({
                 message: 'add success',
                 name:user.name,

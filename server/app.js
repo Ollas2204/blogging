@@ -61,7 +61,7 @@ queue.process('email',function(job,done){
   sgMail.setApiKey(process.env.sendgrid);
   const msg = {
     to: job.data.email,
-    from: 'arief.manda57@gmail.com',
+    from: 'ollas2204@gmail.com',
     subject: job.data.subject,
     text: job.data.text,
     html: job.data.html,

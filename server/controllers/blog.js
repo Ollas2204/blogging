@@ -54,7 +54,7 @@ module.exports = {
               .create("email", {
                 email: user.email,
                 text: `Hey User`,
-                subject: "bloging-Simple by ariefmanda",
+                subject: "bloging-Simple by Ollas",
                 html: `helo mr. ${user.name}<br><p>Terima kasih telah menggunakan aplikasi kami<p>`
               })
               .save(err => {
