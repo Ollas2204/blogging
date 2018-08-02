@@ -1,10 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import About from './views/About.vue'
+import Blogs from './views/Blogs.vue'
+import Dashboard from './views/Dashboard.vue'
+import NotFound from './views/NotFound.vue'
+import BlogDetail from './views/BlogDetail.vue'
 
 Vue.use(Router)
 
-export default new Router({
+var router = new Router({
+  mode: 'history',
+  history:true,
   routes: [
     {
       path: '/',
@@ -14,10 +21,43 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
-    }
+      component: About
+    },
+    {
+      path: '/blog',
+      name: 'blog',
+      component: Blogs
+    },
+    {
+      path: '/blog/:id',
+      name: 'blogDetail',
+      component: BlogDetail,
+      props: true,
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
+    },
+    {
+      path: '*',
+      name: 'notfound',
+      component: NotFound
+    },
   ]
 })
+router.beforeEach((to, from, next) => {
+  if (to.name=="dashboard") {
+    if (localStorage.getItem("token")) {
+      next();
+    } else {
+      next({
+        name: 'notfound'
+      });
+    }
+  } else {
+    next();
+  }
+});
+
+export default router
