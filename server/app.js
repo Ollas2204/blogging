@@ -1,41 +1,76 @@
-var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
-var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bodyParser = require('body-parser');
+var boom = require('boom')
+var cors = require('cors')
+var fb = require('fb')
+const sgMail = require('@sendgrid/mail');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var kue = require('kue')
+  , queue = kue.createQueue({
+    prefix: 'ququ',
+    redis:{
+      port:6379,
+      host:'127.0.0.1'
+    }
+  });
+
+var mongoose = require('mongoose')
+
+require('dotenv').config()
+
+mongoose.connection.openUri('mongodb://localhost/blogging');
+mongoose.Promise = global.Promise;
+mongoose.connection.once('open', () => {
+  console.log('mongoose connection success');
+}).on('error', (error) => {
+  console.log('connection error', error);
+})
+
+var index = require('./routes/index');
+var api = require('./routes/api');
+var auth = require('./routes/auth');
+var blog = require('./routes/blog');
+
 
 var app = express();
-
-// view engine setup
+app.use(cors())
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', index);
+app.use('/api', api);
+app.use('/api/auth', auth);
+app.use('/api/blog', blog);
 
-// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  next(createError(404));
+  var err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-// error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+  res.status(err.status || 500).send(err)
 });
+
+queue.process('email',function(job,done){
+  sgMail.setApiKey(process.env.sendgrid);
+  const msg = {
+    to: job.data.email,
+    from: 'fitrisakinah17@gmail.com',
+    subject: job.data.subject,
+    text: job.data.text,
+    html: job.data.html,
+  };
+  console.log(msg);
+  sgMail.send(msg);
+  done()
+})
+
+kue.app.listen(6387)
 
 module.exports = app;
