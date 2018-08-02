@@ -4,7 +4,7 @@ import Home from './views/Home.vue'
 import About from './views/About.vue'
 import Blogs from './views/Blogs.vue'
 import Dashboard from './views/Dashboard.vue'
-import NotFound from './views/NotFound.vue'
+import NotFound from './components/NotFound.vue'
 import BlogDetail from './views/BlogDetail.vue'
 
 Vue.use(Router)
