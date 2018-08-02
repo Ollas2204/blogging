@@ -1,16 +1,17 @@
 import Vue from 'vue'
+import notifications from 'vue-notification';
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import VModal from 'vue-js-modal'
-import axios from 'axios'
 
 Vue.config.productionTip = false
-Vue.prototype.$axios = axios.create({
-  baseURL: 'http://35.197.158.52/'
-})
 
-Vue.use(VModal)
+Vue.use(notifications);
+
+Vue.prototype.$axios = require('axios').create({
+  baseURL: 'http://127.0.0.1:3000/api', //35.200.153.228
+});
+
 new Vue({
   router,
   store,
