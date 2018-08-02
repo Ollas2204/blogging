@@ -1,50 +1,51 @@
 <template>
   <div id="app">
-    <header>
-    <Header/>
-  </header>
-  <div class="rows">
-    <router-view></router-view>
-  </div>
-  <footer>
-    <Footer/>
-  </footer>
+  <nav class="white" role="navigation">
+    <div class="nav-wrapper container">
+    <router-link to="/" class="brand-logo">🎌 Ollas Blog</router-link>
+      <ul class="right hide-on-med-and-down">
+        <li v-if="!token"> <router-link to="/login">Login</router-link></li>
+        <li v-else @click="out()"> <a>Logout</a> </li>
+      </ul>
+
+      <ul id="nav-mobile" class="sidenav">
+        <li v-if="!token"> <router-link to="/login">Login</router-link></li>
+        <li v-if="token" @click="out()"> Logout </li>
+      </ul>
+      <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    </div>
+  </nav>
+    <router-view/>
   </div>
 </template>
 
 <script>
-  import Header from './components/Header'
-  import Footer from './components/Footer'
-  export default {
-    data () {
-      return {}
-    },
-    components: {
-      Header,
-      Footer
+import { mapActions, mapState } from 'vuex'
+
+export default {
+  name: 'app',
+  data: () => ({
+    component: 'app'
+  }),
+  computed: {
+    ...mapState([
+      'token',
+      'idUser',
+      'articles'
+    ])
+  },
+  methods: {
+    ...mapActions([
+      'get_data'
+    ]),
+    out () {
+      localStorage.clear()
+      window.location = '/'
     }
   }
+
+}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>
